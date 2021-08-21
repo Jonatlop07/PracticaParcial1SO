@@ -6,5 +6,5 @@ gcc archivo_cons.c -o ./arch_cons
 
 for i in "${tamanios[@]}"
 do
-  ./arch_prod $i
+  ./arch_prod $i & ./arch_cons $i
 done

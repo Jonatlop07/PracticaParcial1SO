@@ -2,9 +2,11 @@
 /arch_prod
 /shm_prod
 /shm_cons
+/pipe
 /mkfifo_prod
 /mkfifo_cons
 /socket_prod
 /socket_cons
 /data.txt
 /check.txt
+/mkfifo

@@ -6,3 +6,5 @@
 /mkfifo_cons
 /socket_prod
 /socket_cons
+/data.txt
+/check.txt

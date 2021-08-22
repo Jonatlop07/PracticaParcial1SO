@@ -20,7 +20,11 @@ int main(int argc, char *argv[])
   lock.l_start = 0;
   lock.l_len = 0;
   lock.l_pid = getpid();
-  int fd;
+  int fd,fc;
+  handle_error(fc = open("check.txt", O_RDWR | O_CREAT, 0666), "Fallo al abrir archivo confirmacion->");
+  handle_error(fcntl(fc, F_SETLKW, &lock), "Fallo en fcntl confirmacion->");
+  write(fc, "0", sizeof(char));
+
   size_t mem_size = atoi(argv[1]) * sizeof(char);
   //for (int i = 0; i < 10; i++) {
   char *buffer = (char *)malloc(mem_size);
@@ -30,14 +34,16 @@ int main(int argc, char *argv[])
   {
     fcntl(fd, F_GETLK, &lock);
   }
-  //handle_error(-1, "Fallo al obtener un bloqueo de solo lectura->");
   char c;
   read(fd, buffer, mem_size);
-  printf("\nMem_size: %d", mem_size);
+  printf("\n\nMem_size: %ld", mem_size);
   lock.l_type = F_UNLCK;
   handle_error(fcntl(fd, F_SETLK, &lock), "Fallo en desbloqueo explicito->");
   free(buffer);
   close(fd);
-  //}
+  lseek(fc,0,SEEK_SET);
+  write(fc, "1", sizeof(char));
+  close(fc);
+  
   return 0;
 }

@@ -22,22 +22,37 @@ int main(int argc, char *argv[])
   lock.l_start = 0;
   lock.l_len = 0;
   lock.l_pid = getpid();
-  int fd;
+  int fd,fc;
+  
   size_t mem_size = atoi(argv[1]) * sizeof(char);
   double avg_time = 0.0;
-  //for (int i = 0; i < 10; i++) {
+  
   clock_t begin, end;
+  
   char *buffer = (char *)malloc(mem_size);
   memset(buffer, '0', mem_size);
   begin = clock();
   handle_error(fd = open("data.txt", O_RDWR | O_CREAT, 0666), "Fallo al abrir archivo->");
   handle_error(fcntl(fd, F_SETLK, &lock), "Fallo en fcntl->");
   write(fd, buffer, mem_size);
-  end = clock();
-  avg_time += (double)(end - begin) / CLOCKS_PER_SEC;
+  
   free(buffer);
   close(fd);
-  printf("\n%d-%f", mem_size, avg_time);
-  //}
+
+  handle_error(fc = open("check.txt", O_RDONLY), "Fallo al abrir para leer->");
+  fcntl(fc, F_GETLK, &lock);
+  while (lock.l_type != F_UNLCK)
+  {
+    fcntl(fc, F_GETLK, &lock);
+  }
+  char c;
+  read(fc, &c, sizeof(char));
+  if(c!=0)printf("\nConfirmacion de lectura");
+  handle_error(fcntl(fc, F_SETLK, &lock), "Fallo en desbloqueo explicito confirmacion->");
+  close(fc);
+  end = clock();
+  avg_time += (double)(end - begin) / CLOCKS_PER_SEC;
+  printf("\n%ld-%f", mem_size, avg_time);
+  
   return 0;
 }

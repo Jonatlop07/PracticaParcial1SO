@@ -41,5 +41,6 @@ int main(int argc, char *argv[]) {
   handle_error(send(clientfd, &confirmation_char, mem_size, 0), "\n-->Error en send()");
   close(clientfd);
 
+  free(buffer);
   return 0;
 }

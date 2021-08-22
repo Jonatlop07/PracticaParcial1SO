@@ -52,6 +52,6 @@ int main (int argc, char *argv[]) {
   handle_error(recv(clientfd, &confirmation_char, sizeof(char), 0), "\n-->Error en recv()");
   close(clientfd);
   close(serverfd);
-
+  free(buffer);
   return 0;
 }

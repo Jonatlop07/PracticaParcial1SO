@@ -29,5 +29,6 @@ int main(int argc, char *argv[]) {
     handle_error(write(fd, &confirmation_char, sizeof(char)), "\n-->Error en write()");
     close(fd);
   //}
+  free(buffer);
   return 0;
 }

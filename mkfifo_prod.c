@@ -34,6 +34,7 @@ int main(int argc, char *argv[]) {
     close(fd);
     end = clock();
   //}
+  free(buffer);
   return 0;
 }
 

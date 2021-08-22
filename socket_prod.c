@@ -1,10 +1,11 @@
-#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <netdb.h>
 #include <arpa/inet.h>
-#include <strings.h>
+#include <string.h>
 #include <unistd.h>
 #include <time.h>
 
@@ -19,19 +20,21 @@ void handle_error (int code, char *msg) {
 }
 
 int main (int argc, char *argv[]) {
-  size_t mem_size = atoi(argv[1] * sizeof(char));
+  size_t mem_size = atoi(argv[1]) * sizeof(char);
   int opt = 1, serverfd, clientfd;
   struct sockaddr_in server, client;
   struct hostent *he;
+  socklen_t socklen;
   char confirmation_char = '1';
 
   char *buffer = (char *) malloc(mem_size);
-  
+  memset(buffer, '0', mem_size);
+
   handle_error(serverfd = socket(AF_INET, SOCK_STREAM, 0), "\n-->Error en socket()");
   
   server.sin_family = AF_INET;
-  server.sin_port = htos(PORT);
-  server.sin_addrs.s_addr = INADDR_ANY;
+  server.sin_port = htons(PORT);
+  server.sin_addr.s_addr = INADDR_ANY;
   bzero(server.sin_zero, 8);
   
   setsockopt(serverfd, SOL_SOCKET, SO_REUSEADDR, (char *) &opt, sizeof(opt));
@@ -44,6 +47,7 @@ int main (int argc, char *argv[]) {
     clientfd = accept(serverfd, (struct sockaddr *) &client, &socklen),
     "\n-->Error en accept()"
   );
+  printf("\nBuff: %s", buffer);
   handle_error(send(clientfd, buffer, mem_size, 0), "\n-->Error en send()");
   handle_error(recv(clientfd, &confirmation_char, sizeof(char), 0), "\n-->Error en recv()");
   close(clientfd);

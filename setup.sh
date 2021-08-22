@@ -15,5 +15,5 @@ do
   ./arch_prod $i & ./arch_cons $i
   ./shm_prod $i & ./shm_cons $i
   ./mkfifo_prod $i & ./mkfifo_cons $i
-  ./socket_prod $i & ./socket_cons 127.0.0.0 $i
+  ./socket_prod $i & ./socket_cons 127.0.0.1 $i
 done

@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
@@ -7,8 +9,15 @@
 
 #define PORT 3535
 
+void handle_error (int code, char *msg) {
+  if (code < 0) {
+    perror(msg);
+    exit(-1);
+  }
+}
+
 int main(int argc, char *argv[]) {
-  size_t mem_size = atoi(argv[2] * sizeof(char));
+  size_t mem_size = atoi(argv[2]) * sizeof(char);
   int clientfd;
   struct sockaddr_in client;
   struct hostent *he;
@@ -28,7 +37,8 @@ int main(int argc, char *argv[]) {
   );
 
   handle_error(recv(clientfd, buffer, mem_size, 0), "\n-->Error en recv()");
-  handle_error(send(clientfd, &confirmation_char, mem_size, 0));
+  printf("\n Rec: %s", buffer);
+  handle_error(send(clientfd, &confirmation_char, mem_size, 0), "\n-->Error en send()");
   close(clientfd);
 
   return 0;

@@ -9,4 +9,5 @@
 /socket_cons
 /data.txt
 /check.txt
-/mkfifo
+/mkfifo1
+/mkfifo2

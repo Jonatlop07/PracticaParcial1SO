@@ -18,12 +18,12 @@ do
   wait
 done
 
-#echo $'\n\n<---MEMORIA COMPARTIDA--->:'
-#for i in "${tamanios[@]}"
-#do
-  #./shm_prod $i & ./shm_cons $i
-  3wait
-#done
+echo $'\n\n<---MEMORIA COMPARTIDA--->:'
+for i in "${tamanios[@]}"
+do
+  ./shm_prod $i
+  wait
+done
 
 echo $'\n\n<---TUBERIAS--->:'
 ./pipe

@@ -78,6 +78,11 @@ int main()
     }
   }
 
+  close(prod_fd[READ]);
+  close(prod_fd[WRITE]);
+  close(cons_fd[READ]);
+  close(cons_fd[WRITE]);
+
   free(buffer_prod);
   free(buffer_cons);
 
